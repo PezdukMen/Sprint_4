@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+// import org.openqa.selenium.firefox.FirefoxDriver;
 
 import pomAndData.HomePage;
 import pomAndData.OrderPage;
@@ -50,8 +50,8 @@ public class OrderAScooter {
         return new Object[][]{
                 {"Иван", "Иванович", "Советская, 76, 198", "Черкизовская", "89888888881",
                         "10.10.2026", "сутки", "чёрный жемчуг", "можно не привозить"},
-                /* {"Игорь", "Попов", "Тверская дом 455", "Сокольники", "952335489655",
-                        "29/06/2026", "четверо суток", "серая безысходность", "обязательно необходимо привезти"}, */
+                {"Игорь", "Попов", "Тверская дом 455", "Сокольники", "952335489655",
+                        "29/06/2026", "четверо суток", "серая безысходность", "обязательно необходимо привезти"},
         };
     }
 
