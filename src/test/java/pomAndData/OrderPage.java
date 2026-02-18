@@ -1,4 +1,4 @@
-/* package pomAndData;
+package pomAndData;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
