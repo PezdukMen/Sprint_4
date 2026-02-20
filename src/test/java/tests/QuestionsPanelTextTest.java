@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.junit.Assert;
 import pom.HomePage;
 
 @RunWith(Parameterized.class)
@@ -64,7 +65,8 @@ public class QuestionsPanelTextTest {
 
     @Test
     public void shouldDisplayCorrectTextForFAQQuestion() {
-        objHomePage.clickQuestionAndCheckText(index, expectedText);
+        String actualText = objHomePage.getAccordionPanelText(index);
+        Assert.assertEquals("Неверный текст в вопросе №" + index, expectedText, actualText);
     }
 
     @After

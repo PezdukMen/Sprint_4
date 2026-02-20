@@ -7,9 +7,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import static org.junit.Assert.assertTrue;
 
 import pom.HomePage;
 import pom.OrderPage;
+
+
 
 @RunWith(Parameterized.class)
 public class OrderAScooter {
@@ -97,7 +100,7 @@ public class OrderAScooter {
         objOrderPage.clickOrder();
         objOrderPage.clickOrderConfirmation();
         // Проверка появления модалки
-        objOrderPage.checkOrderModal();
+        assertTrue("Модальное окно успешного заказа не появилось", objOrderPage.isSuccessModalDisplayed());
     }
 
     @After
