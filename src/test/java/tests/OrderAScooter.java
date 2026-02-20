@@ -1,4 +1,4 @@
-/* package tests;
+package tests;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,18 +7,21 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-// import org.openqa.selenium.firefox.FirefoxDriver;
 
-import pomAndData.HomePage;
-import pomAndData.OrderPage;
+import pom.HomePage;
+import pom.OrderPage;
 
 @RunWith(Parameterized.class)
 public class OrderAScooter {
 
+
     private WebDriver driver;
-    private HomePage objHomePage;
+    private HomePage objHomePage; // +@Before что бы не создавать в каждом @Test новую переменную-ссылку
     private OrderPage objOrderPage;
 
+    // Кнопки "Заказать" = true (верхняя)
+    //                   = false (нижняя)
+    private boolean clickButtonUp;
     // стр1
     private final String nameUser;
     private final String surnameUser;
@@ -32,8 +35,10 @@ public class OrderAScooter {
     private final String commentUser;
 
     public OrderAScooter
-            (String nameText, String surnameText, String addressText, String metroStationText, String telephoneNumbers,
+            (boolean clickButtonUp,
+             String nameText, String surnameText, String addressText, String metroStationText, String telephoneNumbers,
              String dateText, String daysPeriodUser, String color, String commentText) {
+        this.clickButtonUp = clickButtonUp;
         this.nameUser = nameText;
         this.surnameUser = surnameText;
         this.addressUser = addressText;
@@ -48,9 +53,11 @@ public class OrderAScooter {
     @Parameterized.Parameters
     public static Object[][] getFullOrder() {
         return new Object[][]{
-                {"Иван", "Иванович", "Советская, 76, 198", "Черкизовская", "89888888881",
+                {true,
+                        "Иванович", "Советская, 76, 198", "Черкизовская", "89888888881",
                         "10.10.2026", "сутки", "чёрный жемчуг", "можно не привозить"},
-                {"Игорь", "Попов", "Тверская дом 455", "Сокольники", "952335489655",
+                {false,
+                        "Попов", "Тверская дом 455", "Сокольники", "952335489655",
                         "29/06/2026", "четверо суток", "серая безысходность", "обязательно необходимо привезти"},
         };
     }
@@ -58,43 +65,21 @@ public class OrderAScooter {
     @Before
     public void startBrowser() {
         driver = new ChromeDriver();
-        // driver = new FirefoxDriver();
         driver.manage().window().maximize(); // полное открытие окна, что бы не было перекрытия png самоката
         driver.get("https://qa-scooter.praktikum-services.ru");
 
         objHomePage = new HomePage(driver);
         objHomePage.clickCookie(); // иначе кнопка принятия куки перекрывает
-
     }
-    // /*
-    @Test // через верхнюю кнопку "Заказать"
-    public void shouldOrderScooterViaTopButton() {
-        objHomePage.clickButtonUp();
 
-        objOrderPage = new OrderPage(driver);
-        // стр1
-        objOrderPage.sendKeysName(nameUser);
-        objOrderPage.sendKeysSurname(surnameUser);
-        objOrderPage.sendKeysAddress(addressUser);
-        objOrderPage.sendKeysMetroStation(metroStationUser);
-        objOrderPage.sendKeysTelephone(telephoneNumbersUser);
-        objOrderPage.clickOnward();
-        // стр2
-        objOrderPage.choiceRentalPeriod(daysPeriodUser); // иначе календарь перекрывает
-        objOrderPage.sendKeysDate(dateUser);
-        objOrderPage.choiceColor(colorUser);
-        objOrderPage.sendKeysComment(commentUser);
-        objOrderPage.clickOrder();
-        objOrderPage.clickOrderConfirmation();
-        // проверка модалки
-        objOrderPage.checkOrderModal();
-    }
-    // */
-    // /*
-    @Test // через нижнюю кнопку "Заказать"
-    public void shouldOrderScooterViaBottomButton() {
-        objHomePage.scrollButtonDown();
-        objHomePage.clickButtonDown();
+    @Test
+    public void shouldOrderScooter() {
+        // Выбор кнопки "Заказать"
+        if (clickButtonUp) {
+            objHomePage.clickButtonUp();
+        } else {
+            objHomePage.clickButtonDown();
+        }
 
         objOrderPage = new OrderPage(driver);
         // стр1
@@ -111,10 +96,9 @@ public class OrderAScooter {
         objOrderPage.sendKeysComment(commentUser);
         objOrderPage.clickOrder();
         objOrderPage.clickOrderConfirmation();
-        // проверка модалки
+        // Проверка появления модалки
         objOrderPage.checkOrderModal();
     }
-    // */
 
     @After
     public void offBrowser() {

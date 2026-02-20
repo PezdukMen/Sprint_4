@@ -32,13 +32,10 @@ Sprint_4
 ├── src
 │   └── test
 │       └── java
-│           ├── pomAndData
+│           ├── pom
 │           │   ├── HomePage.java
-│           │   ├── OrderPage.java
-│           │   └── DropdownListPanelText.java
+│           │   └── OrderPage.java
 │           └── tests
 │               ├── OrderAScooter.java
 │               └── QuestionsPanelTextTest.java
 └── README.md
-
-## Дальше не совсем понял что писать ¯\_(ツ)_/¯

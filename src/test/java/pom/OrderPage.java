@@ -1,12 +1,13 @@
-package pomAndData;
+package pom;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+
+import static org.junit.Assert.assertTrue;
 
 public class OrderPage {
 
@@ -36,8 +37,10 @@ public class OrderPage {
     // Локаторы кнопок подтверждения заполнения данных - "Далее" (стр1), "Заказать" (стр2), "Да" (стр3)
     private By onward = By.xpath(".//button[text()='Далее']");
     private By order = By.xpath(".//button[text()='Заказать']");
-    private By orderConfirmation = // By.xpath(".//button[text()='Да']"); - НЕ РАБОТАЕТ FF
-            By.className("Button_Button__ra12g"); // РАБОТАЕТ FF
+    private By orderConfirmation = By.className("Button_Button__ra12g");
+
+    // Локатор модального окна
+    By modalLocator = By.cssSelector(".Order_Modal__YZ-d3"); // класс <div> не меняется!
 
     // Конструктор класс
     public OrderPage(WebDriver driver) {
@@ -56,7 +59,7 @@ public class OrderPage {
     }
     public void sendKeysMetroStation(String metroStationText) {
         driver.findElement(metroStation).sendKeys(metroStationText);
-        driver.findElement(By.xpath(".//*[text()='" + metroStationText + "']")).click();
+        driver.findElement(By.xpath(".//*[contains(., '" + metroStationText + "')]")).click();
     }
     public void sendKeysTelephone(String telephoneNumbers) {
         driver.findElement(telephone).sendKeys(telephoneNumbers);
@@ -85,7 +88,6 @@ public class OrderPage {
     public void clickOrder() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             wait.until(ExpectedConditions.elementToBeClickable(order)).click();
-        // driver.findElement(order).click();
     }
     public void clickOrderConfirmation() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -94,44 +96,12 @@ public class OrderPage {
 
     // Метод проверки появления модалки
     public void checkOrderModal() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-        // Lvl1: ищем заголовок "Заказ оформлен" (но он #text)
-        By headerLocator = By.xpath("//*[contains(., 'Заказ оформлен')]");
-                // By.className("Order_ModalHeader__3FDAj");
-                // By.xpath("//div[contains(@class, 'Order_ModalHeader')]");
-                // By.xpath("/html/body/div/div/div[2]/div[5]/div[1][text()='Заказ оформлен']");
-                // By.xpath("//*[contains(., 'Заказ оформлен')]"); - НИЧЕГО не работает на FF, так что ставлю самые красивые
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(headerLocator));
-            System.out.println("Найден заголовок 'Заказ оформлен' в модалке = ОК");
-            return; // если нашли = сразу выходим
-        } catch (TimeoutException e) {
-            System.out.println("Заголовок 'Заказ оформлен' в модалке не найден за 20 секунд, ищем текст...");
-        }
-
-        // Lvl2: ищем текст "Номер заказа: "
-        By textLocator = By.xpath("//*[contains(., 'Номер заказа: ')]");
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(textLocator));
-            System.out.println("Найден текст 'Номер заказа: ' в модалке = ОК");
-            return; // если нашли = сразу выходим
-        } catch (TimeoutException e) {
-            System.out.println("Текст 'Номер заказа: ' в модалке не найден за 20 секунд, ищем кнопку...");
-        }
-
-        // lvl3: ищем кнопку "Посмотреть статус"
-        By buttonLocator =
-                By.xpath("//*[contains(., 'Посмотреть статус')]");
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(buttonLocator));
-            System.out.println("Найдена кнопка 'Посмотреть статус' в модалке = ОК");
-            return; // нашли кнопку = сразу выходим
-        } catch (TimeoutException e) {
-            Assert.fail("Модалка не появилась: ни заголовка 'Заказ оформлен', " +
-                    "ни текста 'Номер заказа: ', " +
-                    "ни кнопки 'Посмотреть статус'");
-        }
+        // Ждем появления модального окна
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(modalLocator));
+        // Появилась ли модалка?
+        WebElement modal = driver.findElement(modalLocator);
+        assertTrue("Модальное окно успешного заказа не появилось", modal.isDisplayed());
     }
 
 }
