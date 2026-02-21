@@ -5,9 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import pom.HomePage;
 import pom.OrderPage;
@@ -57,10 +58,10 @@ public class OrderAScooter {
     public static Object[][] getFullOrder() {
         return new Object[][]{
                 {true,
-                        "Иванович", "Советская, 76, 198", "Черкизовская", "89888888881",
+                        "Игорь", "Иванович", "Советская, 76, 198", "Черкизовская", "89888888881",
                         "10.10.2026", "сутки", "чёрный жемчуг", "можно не привозить"},
                 {false,
-                        "Попов", "Тверская дом 455", "Сокольники", "952335489655",
+                        "Наталья", "Попова", "Тверская дом 455", "Сокольники", "952335489655",
                         "29/06/2026", "четверо суток", "серая безысходность", "обязательно необходимо привезти"},
         };
     }
@@ -100,7 +101,11 @@ public class OrderAScooter {
         objOrderPage.clickOrder();
         objOrderPage.clickOrderConfirmation();
         // Проверка появления модалки
-        assertTrue("Модальное окно успешного заказа не появилось", objOrderPage.isSuccessModalDisplayed());
+        try {
+            objOrderPage.waitForSuccessModal();
+        } catch (TimeoutException e) {
+            fail("Модальное окно с текстом 'Заказ оформлен' не появилось за 10 секунд");
+        }
     }
 
     @After

@@ -1,14 +1,10 @@
 package pom;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-
-import static org.junit.Assert.assertTrue;
 
 public class OrderPage {
 
@@ -40,8 +36,8 @@ public class OrderPage {
     private By order = By.xpath(".//button[text()='Заказать']");
     private By orderConfirmation = By.className("Button_Button__ra12g");
 
-    // Локатор модального окна
-    private By modalLocator = By.cssSelector(".Order_Modal__YZ-d3"); // класс <div> не меняется!
+    // Локатор заголовка <div> модального окна "Заказ оформлен"
+    private By successModalHeader = By.xpath("//*[contains(text(), 'Заказ оформлен')]");
 
     // Конструктор класс
     public OrderPage(WebDriver driver) {
@@ -95,15 +91,10 @@ public class OrderPage {
             wait.until(ExpectedConditions.elementToBeClickable(orderConfirmation)).click();
     }
 
-    // Метод проверки появления модалки
-    public boolean isSuccessModalDisplayed() {
-        try { // ожидаем пока станет видимым > отправляем тру
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(modalLocator));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+    // Метод проверки появления модалки, через ожидание
+    public void waitForSuccessModal() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(successModalHeader));
     }
 
 }
