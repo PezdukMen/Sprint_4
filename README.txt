@@ -39,3 +39,17 @@ Sprint_4
 │               ├── OrderAScooter.java
 │               └── QuestionsPanelTextTest.java
 └── README.md
+
+## Как запустить тесты
+
+### Через Maven (рекомендуется)
+
+```bash
+# Все тесты
+mvn clean test
+
+# Только аккордеон
+mvn clean test -Dtest=QuestionsPanelTextTest
+
+# Только заказ самоката
+mvn clean test -Dtest=OrderAScooter

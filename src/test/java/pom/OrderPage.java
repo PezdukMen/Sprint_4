@@ -1,6 +1,7 @@
 package pom;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -40,7 +41,7 @@ public class OrderPage {
     private By orderConfirmation = By.className("Button_Button__ra12g");
 
     // Локатор модального окна
-    By modalLocator = By.cssSelector(".Order_Modal__YZ-d3"); // класс <div> не меняется!
+    private By modalLocator = By.cssSelector(".Order_Modal__YZ-d3"); // класс <div> не меняется!
 
     // Конструктор класс
     public OrderPage(WebDriver driver) {
@@ -95,13 +96,14 @@ public class OrderPage {
     }
 
     // Метод проверки появления модалки
-    public void checkOrderModal() {
-        // Ждем появления модального окна
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public boolean isSuccessModalDisplayed() {
+        try { // ожидаем пока станет видимым > отправляем тру
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             wait.until(ExpectedConditions.visibilityOfElementLocated(modalLocator));
-        // Появилась ли модалка?
-        WebElement modal = driver.findElement(modalLocator);
-        assertTrue("Модальное окно успешного заказа не появилось", modal.isDisplayed());
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
 }
