@@ -60,14 +60,11 @@ public class HomePage {
     public void clickButtonUp() {
         driver.findElement(buttonUp).click();
     }
-    public void clickButtonDown() { // ожидание кликабельности > скролл > клик
+    public void clickButtonDown() { // JavaScript-клик, иначе перекрытие хедером
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-            wait.until(ExpectedConditions.elementToBeClickable(buttonDown));
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(buttonDown));
 
-        WebElement element = driver.findElement(buttonDown);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-
-        driver.findElement(buttonDown).click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
     }
 
 }

@@ -13,7 +13,7 @@ import pom.HomePage;
 import pom.OrderPage;
 
 @RunWith(Parameterized.class)
-public class OrderAScooter {
+public class OrderAScooterTest {
 
 
     private WebDriver driver;
@@ -35,7 +35,7 @@ public class OrderAScooter {
     private final String colorUser;
     private final String commentUser;
 
-    public OrderAScooter
+    public OrderAScooterTest
             (boolean clickButtonUp,
              String nameText, String surnameText, String addressText, String metroStationText, String telephoneNumbers,
              String dateText, String daysPeriodUser, String color, String commentText) {

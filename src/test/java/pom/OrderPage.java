@@ -33,9 +33,8 @@ public class OrderPage {
 
     // Локаторы кнопок подтверждения заполнения данных - "Далее" (стр1), "Заказать" (стр2), "Да" (стр3)
     private By onward = By.xpath(".//button[text()='Далее']");
-    // полный путь, т.к. 2 кнопки "Заказать", самое устойчивое
-    private By order =
-            By.xpath("/html/body/div/div/div[2]/div[3]/button[2]");
+    // 2 кнопки "Заказать", нам нужна нижняя
+    private By order = By.cssSelector("button.Button_Middle__1CSJM:nth-child(2)");
     private By orderConfirmation =
             By.xpath("//button[contains(., 'Да') and contains(@class, 'Button_Middle')]");
 

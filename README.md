@@ -36,7 +36,7 @@ Sprint_4
 │           │   ├── HomePage.java
 │           │   └── OrderPage.java
 │           └── tests
-│               ├── OrderAScooter.java
+│               ├── OrderAScooterTest.java
 │               └── QuestionsPanelTextTest.java
 └── README.md
 
